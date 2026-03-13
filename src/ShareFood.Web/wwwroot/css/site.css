@@ -32,6 +32,8 @@ body {
     font-family: "Be Vietnam Pro", "Segoe UI", sans-serif;
     color: var(--ink);
     background: linear-gradient(180deg, #fffaf5 0%, #fffdf9 42%, #f7efe8 100%);
+    font-size: 0.98rem;
+    line-height: 1.6;
 }
 
 a {
@@ -103,11 +105,51 @@ img {
     color: var(--ink);
     font-weight: 500;
     padding: 0.75rem 1rem !important;
+    position: relative;
 }
 
 .nav-link:hover,
 .nav-link--accent {
     color: var(--brand-600) !important;
+}
+
+.nav-link::after {
+    content: "";
+    position: absolute;
+    left: 1rem;
+    right: 1rem;
+    bottom: 0.45rem;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--brand-400), var(--brand-700));
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.25s ease;
+}
+
+.nav-link:hover::after,
+.nav-link--accent::after {
+    transform: scaleX(1);
+}
+
+.nav-link--icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+}
+
+.notification-badge {
+    display: inline-grid;
+    place-items: center;
+    min-width: 1.45rem;
+    height: 1.45rem;
+    padding: 0 0.35rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--brand-500), var(--brand-700));
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    box-shadow: var(--shadow-md);
 }
 
 .btn {
@@ -200,6 +242,14 @@ img {
 .profile-hero h1 {
     font-weight: 800;
     line-height: 1.08;
+}
+
+.auth-panel h1,
+.recipe-detail h1,
+.profile-hero h1,
+.section-heading h2,
+.status-panel h1 {
+    font-size: clamp(1.8rem, 2.8vw, 2.6rem);
 }
 
 .hero-panel h1 {
@@ -302,6 +352,14 @@ img {
     line-height: 1.35;
 }
 
+.recipe-card h3 a {
+    transition: color 0.25s ease;
+}
+
+.recipe-card h3 a:hover {
+    color: var(--brand-600);
+}
+
 .recipe-card p {
     color: var(--muted);
     line-height: 1.7;
@@ -346,6 +404,70 @@ img {
     color: var(--muted);
 }
 
+.notification-dropdown {
+    width: min(94vw, 360px);
+    padding: 0.5rem;
+    border: 1px solid rgba(83, 58, 46, 0.08);
+    border-radius: 22px;
+    box-shadow: var(--shadow-lg);
+}
+
+.notification-dropdown__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.85rem 0.9rem 0.6rem;
+}
+
+.notification-dropdown__header a {
+    color: var(--brand-700);
+    font-weight: 600;
+}
+
+.notification-empty {
+    padding: 1rem 0.9rem;
+    color: var(--muted);
+}
+
+.notification-item {
+    display: grid;
+    gap: 0.25rem;
+    padding: 0.95rem 0.9rem;
+    border-radius: 18px;
+    white-space: normal;
+}
+
+.notification-item strong {
+    color: var(--ink);
+}
+
+.notification-item span,
+.notification-item small {
+    color: var(--muted);
+}
+
+.notification-item:hover,
+.notification-item:focus {
+    background: rgba(255, 246, 236, 0.9);
+}
+
+.notification-item--unread {
+    background: rgba(255, 246, 236, 0.72);
+}
+
+.footer-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.footer-links a:hover {
+    color: var(--brand-600);
+    transform: translateX(4px);
+}
+
 .auth-panel {
     display: grid;
     gap: 1.5rem;
@@ -355,6 +477,13 @@ img {
 
 .auth-card {
     padding: 2rem;
+}
+
+.otp-input {
+    letter-spacing: 0.45rem;
+    text-align: center;
+    font-size: 1.35rem;
+    font-weight: 700;
 }
 
 .auth-card__footer {
@@ -563,6 +692,82 @@ img {
     font-weight: 800;
 }
 
+.account-quick-card {
+    height: 100%;
+    padding: 1.5rem;
+}
+
+.account-quick-card__label {
+    display: inline-flex;
+    margin-bottom: 0.65rem;
+    padding: 0.4rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(201, 107, 59, 0.1);
+    color: var(--brand-700);
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.account-quick-card strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.account-quick-card p {
+    color: var(--muted);
+}
+
+.notification-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.notification-card {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.5rem;
+}
+
+.notification-card--unread {
+    border-color: rgba(201, 107, 59, 0.2);
+    background: linear-gradient(180deg, rgba(255, 248, 240, 0.98), rgba(255, 255, 255, 0.98));
+}
+
+.notification-card__content {
+    flex: 1;
+}
+
+.notification-card__top {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.notification-card__top h3 {
+    margin: 0.35rem 0 0;
+    font-size: 1.15rem;
+}
+
+.notification-card__tag {
+    display: inline-flex;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(201, 107, 59, 0.1);
+    color: var(--brand-700);
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.notification-card__content p,
+.notification-card__top small {
+    color: var(--muted);
+}
+
 .admin-layout {
     display: grid;
     grid-template-columns: 300px 1fr;
@@ -604,6 +809,11 @@ img {
     background: linear-gradient(180deg, #fbf6f1 0%, #f7efe8 100%);
 }
 
+.admin-main .container-fluid {
+    max-width: 1460px;
+    margin: 0 auto;
+}
+
 .admin-page__header {
     display: flex;
     justify-content: space-between;
@@ -614,6 +824,18 @@ img {
 
 .metric-card {
     min-height: 100%;
+}
+
+.admin-card--form {
+    max-width: 980px;
+}
+
+.admin-card .table {
+    min-width: 840px;
+}
+
+.admin-shell .share-toast-container {
+    top: 1rem !important;
 }
 
 .metric-card span {
@@ -658,7 +880,7 @@ img {
 }
 
 .share-toast .toast-body {
-    min-width: 320px;
+    min-width: min(320px, 100%);
 }
 
 @media (max-width: 1199.98px) {
@@ -730,5 +952,130 @@ img {
     .recipe-card__stats {
         flex-direction: column;
         gap: 0.4rem;
+    }
+
+    .notification-card,
+    .notification-card__top {
+        flex-direction: column;
+    }
+}
+
+a {
+    transition: color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
+}
+
+h1,
+h2,
+h3 {
+    letter-spacing: -0.02em;
+}
+
+.nav-link:hover {
+    transform: translateY(-1px);
+}
+
+.btn-brand-outline:hover,
+.btn-brand:hover {
+    transform: translateY(-1px);
+}
+
+.recipe-card {
+    transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+}
+
+.recipe-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 26px 50px rgba(71, 45, 30, 0.18);
+    border-color: rgba(201, 107, 59, 0.18);
+}
+
+.category-pill {
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.category-pill:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(201, 107, 59, 0.2);
+}
+
+.comment-card {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.comment-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.profile-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.85rem;
+    color: var(--muted);
+}
+
+.profile-meta span {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.45rem 0.75rem;
+    border-radius: 999px;
+    background: rgba(255, 246, 236, 0.85);
+}
+
+.site-footer {
+    margin-top: 3rem;
+}
+
+.site-footer .container {
+    padding-top: 1.2rem !important;
+    padding-bottom: 1.2rem !important;
+}
+
+.site-footer p,
+.site-footer li,
+.site-footer a,
+.site-footer small {
+    font-size: 0.92rem;
+}
+
+.footer-title {
+    margin-bottom: 0.55rem;
+}
+
+.share-toast-container {
+    top: 104px !important;
+    z-index: 1080;
+    max-width: min(92vw, 380px);
+}
+
+.admin-card {
+    overflow: hidden;
+}
+
+.admin-nav .nav-link:hover {
+    transform: translateX(4px);
+}
+
+@media (max-width: 767.98px) {
+    .profile-meta {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .share-toast-container {
+        top: 86px !important;
+        left: 0.8rem;
+        right: 0.8rem;
+        max-width: none;
+    }
+
+    .site-footer {
+        margin-top: 2.2rem;
+    }
+
+    .category-pill {
+        padding: 0.8rem 0.9rem;
     }
 }

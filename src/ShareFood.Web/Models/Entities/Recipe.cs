@@ -43,4 +43,6 @@ public class Recipe : BaseEntity
     public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
     public ICollection<Favorite> Favorites { get; set; } = new List<Favorite>();
+
+    public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 }

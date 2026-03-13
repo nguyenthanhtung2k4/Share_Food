@@ -53,6 +53,12 @@ public class FavoritesController : Controller
     public async Task<IActionResult> Toggle(int recipeId, string? returnUrl, CancellationToken cancellationToken)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+        var actorName = await _dbContext.Users
+            .AsNoTracking()
+            .Where(item => item.Id == userId)
+            .Select(item => item.FullName)
+            .FirstOrDefaultAsync(cancellationToken);
+
         var recipe = await _dbContext.Recipes
             .AsNoTracking()
             .FirstOrDefaultAsync(item => item.Id == recipeId && item.IsVisible, cancellationToken);
@@ -73,6 +79,17 @@ public class FavoritesController : Controller
                 RecipeId = recipeId,
                 UserId = userId
             });
+
+            if (!string.Equals(recipe.AuthorId, userId, StringComparison.Ordinal))
+            {
+                _dbContext.Notifications.Add(new Models.Entities.Notification
+                {
+                    RecipientUserId = recipe.AuthorId,
+                    RecipeId = recipeId,
+                    Title = "Có người thích công thức của bạn",
+                    Message = $"{actorName ?? "Một thành viên"} vừa lưu công thức \"{recipe.Title}\" của bạn vào danh sách yêu thích."
+                });
+            }
 
             TempData.SetSuccess("Đã lưu công thức", "Công thức đã được thêm vào danh sách yêu thích.");
         }

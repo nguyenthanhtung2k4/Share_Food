@@ -1,0 +1,39 @@
+@model NotificationMenuViewModel
+
+<li class="nav-item dropdown">
+    <button class="nav-link nav-link--icon btn btn-link border-0 bg-transparent dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Thông báo
+        @if (Model.UnreadCount > 0)
+        {
+            <span class="notification-badge">@Model.UnreadCount</span>
+        }
+    </button>
+    <div class="dropdown-menu dropdown-menu-end notification-dropdown">
+        <div class="notification-dropdown__header">
+            <strong>Thông báo mới</strong>
+            <a asp-area="Client" asp-controller="Notifications" asp-action="Index">Xem tất cả</a>
+        </div>
+
+        @if (Model.Items.Count == 0)
+        {
+            <div class="notification-empty">
+                Chưa có thông báo nào dành cho bạn.
+            </div>
+        }
+        else
+        {
+            @foreach (var item in Model.Items)
+            {
+                <a class="dropdown-item notification-item @(item.IsRead ? string.Empty : "notification-item--unread")"
+                   asp-area="Client"
+                   asp-controller="Notifications"
+                   asp-action="Open"
+                   asp-route-id="@item.Id">
+                    <strong>@item.Title</strong>
+                    <span>@item.Message</span>
+                    <small>@item.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</small>
+                </a>
+            }
+        }
+    </div>
+</li>

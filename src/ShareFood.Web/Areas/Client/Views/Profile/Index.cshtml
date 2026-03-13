@@ -5,10 +5,17 @@
 
 <section class="profile-hero">
     <div>
-        <span class="section-heading__eyebrow">Thành viên Share Food</span>
+        <span class="section-heading__eyebrow">Tài khoản của bạn</span>
         <h1>@Model.FullName</h1>
         <p>@Model.Email</p>
-        <small>Tham gia từ @Model.JoinedAt.ToLocalTime().ToString("dd/MM/yyyy")</small>
+        <div class="profile-meta">
+            <span>Tham gia từ @Model.JoinedAt.ToLocalTime().ToString("dd/MM/yyyy")</span>
+            <span>@(Model.EmailConfirmed ? "Email đã xác nhận" : "Email chưa xác nhận")</span>
+            @if (!string.IsNullOrWhiteSpace(Model.PhoneNumber))
+            {
+                <span>@Model.PhoneNumber</span>
+            }
+        </div>
     </div>
     <div class="profile-hero__stats">
         <div>
@@ -18,6 +25,123 @@
         <div>
             <strong>@Model.FavoriteCount</strong>
             <span>Món đã lưu</span>
+        </div>
+    </div>
+</section>
+
+<section class="section-space">
+    <div class="row g-4">
+        <div class="col-xl-6">
+            <div class="detail-card">
+                <div class="section-heading mb-4">
+                    <div>
+                        <span class="section-heading__eyebrow">Thông tin cá nhân</span>
+                        <h2>Cập nhật hồ sơ</h2>
+                    </div>
+                </div>
+
+                <partial name="_ValidationSummary" />
+                <form asp-action="UpdateProfile" method="post" class="row g-3">
+                    @Html.AntiForgeryToken()
+                    <div class="col-12">
+                        <label asp-for="EditProfile.FullName" class="form-label"></label>
+                        <input asp-for="EditProfile.FullName" class="form-control form-control-lg" />
+                        <span asp-validation-for="EditProfile.FullName" class="text-danger small"></span>
+                    </div>
+                    <div class="col-12">
+                        <label asp-for="EditProfile.PhoneNumber" class="form-label"></label>
+                        <input asp-for="EditProfile.PhoneNumber" class="form-control form-control-lg" placeholder="Ví dụ: 0987654321" />
+                        <span asp-validation-for="EditProfile.PhoneNumber" class="text-danger small"></span>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Email</label>
+                        <input class="form-control form-control-lg" value="@Model.Email" readonly />
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input asp-for="EditProfile.ReceiveNewsEmails" class="form-check-input" />
+                            <label asp-for="EditProfile.ReceiveNewsEmails" class="form-check-label"></label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-brand">Lưu thông tin</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-xl-6">
+            <div class="detail-card">
+                <div class="section-heading mb-4">
+                    <div>
+                        <span class="section-heading__eyebrow">Bảo mật</span>
+                        <h2>Đổi mật khẩu</h2>
+                    </div>
+                </div>
+
+                <partial name="_ValidationSummary" />
+                <form asp-action="ChangePassword" method="post" class="row g-3">
+                    @Html.AntiForgeryToken()
+                    <div class="col-12">
+                        <label asp-for="ChangePassword.CurrentPassword" class="form-label"></label>
+                        <input asp-for="ChangePassword.CurrentPassword" class="form-control form-control-lg" />
+                        <span asp-validation-for="ChangePassword.CurrentPassword" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="ChangePassword.NewPassword" class="form-label"></label>
+                        <input asp-for="ChangePassword.NewPassword" class="form-control form-control-lg" />
+                        <span asp-validation-for="ChangePassword.NewPassword" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="ChangePassword.ConfirmPassword" class="form-label"></label>
+                        <input asp-for="ChangePassword.ConfirmPassword" class="form-control form-control-lg" />
+                        <span asp-validation-for="ChangePassword.ConfirmPassword" class="text-danger small"></span>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-brand-outline">Cập nhật mật khẩu</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-space">
+    <div class="section-heading">
+        <div>
+            <span class="section-heading__eyebrow">Tóm tắt tài khoản</span>
+            <h2>Thông tin nhanh</h2>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="detail-card account-quick-card">
+                <span class="account-quick-card__label">Trạng thái email</span>
+                <strong>@(Model.EmailConfirmed ? "Đã xác nhận" : "Chưa xác nhận")</strong>
+                <p class="mb-0">Email là khóa đăng nhập chính và dùng để nhận thông báo từ hệ thống.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="detail-card account-quick-card">
+                <span class="account-quick-card__label">Liên hệ</span>
+                <strong>@(string.IsNullOrWhiteSpace(Model.PhoneNumber) ? "Chưa cập nhật" : Model.PhoneNumber)</strong>
+                <p class="mb-0">Bạn có thể đổi họ tên và số điện thoại ngay trong mục cập nhật hồ sơ.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="detail-card account-quick-card">
+                <span class="account-quick-card__label">Hoạt động</span>
+                <strong>@Model.RecipeCount công thức, @Model.FavoriteCount món đã lưu</strong>
+                <p class="mb-0">Tiếp tục chia sẻ thêm món ngon để xây dựng bộ sưu tập cá nhân của bạn.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="detail-card account-quick-card">
+                <span class="account-quick-card__label">Bản tin email</span>
+                <strong>@(Model.ReceiveNewsEmails ? "Đang nhận cập nhật" : "Đã tắt cập nhật")</strong>
+                <p class="mb-0">Bật mục này nếu bạn muốn nhận thư chào mừng và các gợi ý món mới qua email.</p>
+            </div>
         </div>
     </div>
 </section>
@@ -52,3 +176,7 @@
         }
     </div>
 </section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

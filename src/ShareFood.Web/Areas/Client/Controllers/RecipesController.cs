@@ -361,7 +361,7 @@ public class RecipesController : Controller
     [Authorize]
     [HttpPost("{id:int}/binh-luan")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> AddComment(int id, CommentInputViewModel model, CancellationToken cancellationToken)
+    public async Task<IActionResult> AddComment(int id, [Bind(Prefix = "NewComment")] CommentInputViewModel model, CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid)
         {

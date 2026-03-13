@@ -3,6 +3,7 @@
     var pageTitle = string.IsNullOrWhiteSpace(title) ? "Share Food" : $"{title} | Share Food";
     var isAuthenticated = User.Identity?.IsAuthenticated ?? false;
     var isAdmin = User.IsInRole(RoleNames.Admin);
+    var currentUrl = $"{Context.Request.Path}{Context.Request.QueryString}";
 }
 <!DOCTYPE html>
 <html lang="vi">
@@ -45,6 +46,7 @@
                         </li>
                         @if (isAuthenticated)
                         {
+                            @await Component.InvokeAsync("NotificationMenu")
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="Client" asp-controller="Favorites" asp-action="Index">Yêu thích</a>
                             </li>
@@ -67,7 +69,11 @@
                         else
                         {
                             <li class="nav-item">
-                                <a class="btn btn-sm btn-brand-outline" asp-area="Client" asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                                <a class="btn btn-sm btn-brand-outline"
+                                   asp-area="Client"
+                                   asp-controller="Account"
+                                   asp-action="Login"
+                                   asp-route-returnUrl="@currentUrl">Đăng nhập</a>
                             </li>
                             <li class="nav-item">
                                 <a class="btn btn-sm btn-brand" asp-area="Client" asp-controller="Account" asp-action="Register">Đăng ký</a>
@@ -97,7 +103,7 @@
                 </div>
                 <div class="col-lg-4">
                     <h6 class="footer-title">Danh mục nổi bật</h6>
-                    @await Component.InvokeAsync("FeaturedCategories", new { count = 4 })
+                    @await Component.InvokeAsync("FeaturedCategories", new { count = 3 })
                 </div>
                 <div class="col-lg-3">
                     <h6 class="footer-title">Liên kết nhanh</h6>

@@ -111,9 +111,16 @@
     }
     else
     {
+        var currentUrl = $"{Context.Request.Path}{Context.Request.QueryString}";
+
         <div class="empty-panel mb-4">
             <p class="mb-0">
-                Bạn cần <a asp-area="Client" asp-controller="Account" asp-action="Login">đăng nhập</a> để bình luận và lưu công thức yêu thích.
+                Bạn cần
+                <a asp-area="Client"
+                   asp-controller="Account"
+                   asp-action="Login"
+                   asp-route-returnUrl="@currentUrl">đăng nhập</a>
+                để bình luận và lưu công thức yêu thích.
             </p>
         </div>
     }

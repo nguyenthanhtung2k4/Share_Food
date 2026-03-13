@@ -29,6 +29,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<Favorite> Favorites => Set<Favorite>();
 
+    public DbSet<Notification> Notifications => Set<Notification>();
+
+    public DbSet<EmailOtp> EmailOtps => Set<EmailOtp>();
+
     public override int SaveChanges()
     {
         ApplyTimestamps();
@@ -175,6 +179,34 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                 .WithMany(user => user.Favorites)
                 .HasForeignKey(favorite => favorite.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        builder.Entity<Notification>(entity =>
+        {
+            entity.HasIndex(notification => new { notification.RecipientUserId, notification.IsRead, notification.CreatedAt });
+            entity.Property(notification => notification.Title).HasMaxLength(160);
+            entity.Property(notification => notification.Message).HasMaxLength(500);
+
+            entity.HasOne(notification => notification.RecipientUser)
+                .WithMany(user => user.Notifications)
+                .HasForeignKey(notification => notification.RecipientUserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(notification => notification.Recipe)
+                .WithMany(recipe => recipe.Notifications)
+                .HasForeignKey(notification => notification.RecipeId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<EmailOtp>(entity =>
+        {
+            entity.HasIndex(item => new { item.UserId, item.IsUsed, item.ExpiresAt });
+            entity.Property(item => item.Code).HasMaxLength(6);
+
+            entity.HasOne(item => item.User)
+                .WithMany(user => user.EmailOtps)
+                .HasForeignKey(item => item.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
     }
 

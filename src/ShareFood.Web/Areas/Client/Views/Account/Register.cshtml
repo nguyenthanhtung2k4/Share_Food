@@ -34,6 +34,12 @@
                 <input asp-for="ConfirmPassword" class="form-control form-control-lg" />
                 <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
             </div>
+            <div class="col-12">
+                <div class="form-check">
+                    <input asp-for="ReceiveNewsEmails" class="form-check-input" />
+                    <label asp-for="ReceiveNewsEmails" class="form-check-label"></label>
+                </div>
+            </div>
             <div class="col-12 d-grid">
                 <button type="submit" class="btn btn-brand btn-lg">Tạo tài khoản</button>
             </div>

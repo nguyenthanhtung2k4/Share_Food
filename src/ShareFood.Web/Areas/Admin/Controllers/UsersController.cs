@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ShareFood.Web.Helpers;
 using ShareFood.Web.Models.Entities;
@@ -49,6 +50,47 @@ public class UsersController : Controller
         return View(items);
     }
 
+    [HttpGet("them-moi")]
+    public IActionResult Create()
+    {
+        return View(BuildCreateUserViewModel(new CreateUserViewModel()));
+    }
+
+    [HttpPost("them-moi")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(CreateUserViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(BuildCreateUserViewModel(model));
+        }
+
+        var user = new ApplicationUser
+        {
+            UserName = model.Email.Trim(),
+            Email = model.Email.Trim(),
+            FullName = model.FullName.Trim(),
+            PhoneNumber = model.PhoneNumber?.Trim(),
+            EmailConfirmed = model.EmailConfirmed,
+            JoinedAt = DateTime.UtcNow
+        };
+
+        var result = await _userManager.CreateAsync(user, model.Password);
+        if (!result.Succeeded)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            return View(BuildCreateUserViewModel(model));
+        }
+
+        await _userManager.AddToRoleAsync(user, model.Role);
+        TempData.SetSuccess("Tạo người dùng thành công", "Tài khoản mới đã được thêm vào hệ thống.");
+        return RedirectToAction(nameof(Index));
+    }
+
     [HttpPost("khoa-mo/{id}")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ToggleLock(string id)
@@ -84,5 +126,16 @@ public class UsersController : Controller
             user.LockoutEnd > DateTimeOffset.UtcNow ? "Tài khoản đã bị khóa." : "Tài khoản đã được mở khóa.");
 
         return RedirectToAction(nameof(Index));
+    }
+
+    private static CreateUserViewModel BuildCreateUserViewModel(CreateUserViewModel model)
+    {
+        model.Roles = new List<SelectListItem>
+        {
+            new(RoleNames.User, RoleNames.User, string.Equals(model.Role, RoleNames.User, StringComparison.Ordinal)),
+            new(RoleNames.Admin, RoleNames.Admin, string.Equals(model.Role, RoleNames.Admin, StringComparison.Ordinal))
+        };
+
+        return model;
     }
 }

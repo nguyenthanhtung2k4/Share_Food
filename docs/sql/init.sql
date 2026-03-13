@@ -258,6 +258,46 @@ CREATE UNIQUE INDEX [IX_Units_Name] ON [Units] ([Name]);
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
 VALUES (N'20260313095835_InitialCreate', N'9.0.10');
 
+CREATE TABLE [Notifications] (
+    [Id] int NOT NULL IDENTITY,
+    [RecipientUserId] nvarchar(450) NOT NULL,
+    [RecipeId] int NOT NULL,
+    [Title] nvarchar(160) NOT NULL,
+    [Message] nvarchar(500) NOT NULL,
+    [IsRead] bit NOT NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NOT NULL,
+    CONSTRAINT [PK_Notifications] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Notifications_AspNetUsers_RecipientUserId] FOREIGN KEY ([RecipientUserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_Notifications_Recipes_RecipeId] FOREIGN KEY ([RecipeId]) REFERENCES [Recipes] ([Id]) ON DELETE CASCADE
+);
+
+CREATE INDEX [IX_Notifications_RecipeId] ON [Notifications] ([RecipeId]);
+
+CREATE INDEX [IX_Notifications_RecipientUserId_IsRead_CreatedAt] ON [Notifications] ([RecipientUserId], [IsRead], [CreatedAt]);
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20260313121227_AddNotifications', N'9.0.10');
+
+ALTER TABLE [AspNetUsers] ADD [ReceiveNewsEmails] bit NOT NULL DEFAULT CAST(0 AS bit);
+
+CREATE TABLE [EmailOtps] (
+    [Id] int NOT NULL IDENTITY,
+    [UserId] nvarchar(450) NOT NULL,
+    [Code] nvarchar(6) NOT NULL,
+    [ExpiresAt] datetime2 NOT NULL,
+    [IsUsed] bit NOT NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NOT NULL,
+    CONSTRAINT [PK_EmailOtps] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_EmailOtps_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+
+CREATE INDEX [IX_EmailOtps_UserId_IsUsed_ExpiresAt] ON [EmailOtps] ([UserId], [IsUsed], [ExpiresAt]);
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20260313123617_AddEmailOtpAndNewsletter', N'9.0.10');
+
 COMMIT;
 GO
 

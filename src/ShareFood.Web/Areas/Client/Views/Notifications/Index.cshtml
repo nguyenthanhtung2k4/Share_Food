@@ -1,0 +1,53 @@
+@model NotificationPageViewModel
+@{
+    ViewData["Title"] = "Thông báo";
+}
+
+<section class="section-space mt-0">
+    <div class="section-heading">
+        <div>
+            <span class="section-heading__eyebrow">Theo dõi tương tác</span>
+            <h1>Thông báo của bạn</h1>
+            <p class="mb-0">Bạn có @Model.UnreadCount thông báo chưa đọc.</p>
+        </div>
+        <form asp-action="MarkAllAsRead" method="post">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-brand-outline">Đánh dấu đã đọc tất cả</button>
+        </form>
+    </div>
+
+    @if (Model.Notifications.Count == 0)
+    {
+        <div class="empty-panel">
+            <h3>Chưa có thông báo</h3>
+            <p>Những tương tác mới từ cộng đồng sẽ xuất hiện tại đây.</p>
+        </div>
+    }
+    else
+    {
+        <div class="notification-list">
+            @foreach (var item in Model.Notifications)
+            {
+                <article class="detail-card notification-card @(item.IsRead ? string.Empty : "notification-card--unread")">
+                    <div class="notification-card__content">
+                        <div class="notification-card__top">
+                            <div>
+                                <span class="notification-card__tag">@(item.IsRead ? "Đã đọc" : "Mới")</span>
+                                <h3>@item.Title</h3>
+                            </div>
+                            <small>@item.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</small>
+                        </div>
+                        <p>@item.Message</p>
+                    </div>
+                    <div class="notification-card__actions">
+                        <a class="btn btn-brand-outline"
+                           asp-area="Client"
+                           asp-controller="Notifications"
+                           asp-action="Open"
+                           asp-route-id="@item.Id">Xem công thức</a>
+                    </div>
+                </article>
+            }
+        </div>
+    }
+</section>

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShareFood.Web.Data;
 
@@ -11,9 +12,11 @@ using ShareFood.Web.Data;
 namespace ShareFood.Web.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260313121227_AddNotifications")]
+    partial class AddNotifications
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -205,9 +208,6 @@ namespace ShareFood.Web.Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("ReceiveNewsEmails")
-                        .HasColumnType("bit");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -341,42 +341,6 @@ namespace ShareFood.Web.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Comments");
-                });
-
-            modelBuilder.Entity("ShareFood.Web.Models.Entities.EmailOtp", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(6)
-                        .HasColumnType("nvarchar(6)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ExpiresAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsUsed")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId", "IsUsed", "ExpiresAt");
-
-                    b.ToTable("EmailOtps");
                 });
 
             modelBuilder.Entity("ShareFood.Web.Models.Entities.Favorite", b =>
@@ -823,17 +787,6 @@ namespace ShareFood.Web.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ShareFood.Web.Models.Entities.EmailOtp", b =>
-                {
-                    b.HasOne("ShareFood.Web.Models.Entities.ApplicationUser", "User")
-                        .WithMany("EmailOtps")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("ShareFood.Web.Models.Entities.Favorite", b =>
                 {
                     b.HasOne("ShareFood.Web.Models.Entities.Recipe", "Recipe")
@@ -932,8 +885,6 @@ namespace ShareFood.Web.Data.Migrations
             modelBuilder.Entity("ShareFood.Web.Models.Entities.ApplicationUser", b =>
                 {
                     b.Navigation("Comments");
-
-                    b.Navigation("EmailOtps");
 
                     b.Navigation("Favorites");
 
