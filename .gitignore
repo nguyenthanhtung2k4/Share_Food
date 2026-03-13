@@ -1,0 +1,33 @@
+# Build output
+bin/
+obj/
+artifacts/
+
+# Rider / VS / VS Code
+.vs/
+.idea/
+.vscode/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ASP.NET / web
+src/ShareFood.Web/wwwroot/uploads/recipes/*
+!src/ShareFood.Web/wwwroot/uploads/recipes/.gitkeep
+
+# Database / local files
+*.db
+*.sqlite
+*.sqlite3
+*.mdf
+*.ldf
+
+# Logs
+*.log
+
+# OS files
+Thumbs.db
+Desktop.ini
