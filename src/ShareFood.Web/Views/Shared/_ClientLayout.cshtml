@@ -1,0 +1,119 @@
+@{
+    var title = ViewData["Title"]?.ToString();
+    var pageTitle = string.IsNullOrWhiteSpace(title) ? "Share Food" : $"{title} | Share Food";
+    var isAuthenticated = User.Identity?.IsAuthenticated ?? false;
+    var isAdmin = User.IsInRole(RoleNames.Admin);
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@pageTitle</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ShareFood.Web.styles.css" asp-append-version="true" />
+</head>
+<body class="client-shell">
+    <div class="site-backdrop"></div>
+    <header class="site-header">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container py-3">
+                <a class="brand-mark" asp-area="Client" asp-controller="Home" asp-action="Index">
+                    <span class="brand-mark__icon">SF</span>
+                    <span>
+                        <strong>Share Food</strong>
+                        <small>Chia sẻ công thức nấu ăn</small>
+                    </span>
+                </a>
+                <button class="navbar-toggler shadow-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-label="Mở menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Client" asp-controller="Home" asp-action="Index">Trang chủ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Client" asp-controller="Recipes" asp-action="Index">Công thức</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Client" asp-controller="Recipes" asp-action="Create">Đăng công thức</a>
+                        </li>
+                        @if (isAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Client" asp-controller="Favorites" asp-action="Index">Yêu thích</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Client" asp-controller="Profile" asp-action="Index">Hồ sơ</a>
+                            </li>
+                            @if (isAdmin)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link nav-link--accent" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Quản trị</a>
+                                </li>
+                            }
+                            <li class="nav-item">
+                                <form asp-area="Client" asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-brand-outline">Đăng xuất</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="btn btn-sm btn-brand-outline" asp-area="Client" asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-sm btn-brand" asp-area="Client" asp-controller="Account" asp-action="Register">Đăng ký</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="container py-4 py-lg-5">
+            @await Html.PartialAsync("_Toast")
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container py-4 py-lg-5">
+            <div class="row g-4 align-items-start">
+                <div class="col-lg-5">
+                    <h5 class="footer-title">Share Food</h5>
+                    <p class="mb-0 text-muted">
+                        Nơi lưu giữ công thức gia đình, món ngon theo mùa và cảm hứng nấu ăn mỗi ngày.
+                    </p>
+                </div>
+                <div class="col-lg-4">
+                    <h6 class="footer-title">Danh mục nổi bật</h6>
+                    @await Component.InvokeAsync("FeaturedCategories", new { count = 4 })
+                </div>
+                <div class="col-lg-3">
+                    <h6 class="footer-title">Liên kết nhanh</h6>
+                    <ul class="footer-links">
+                        <li><a asp-area="Client" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                        <li><a asp-area="Client" asp-controller="Recipes" asp-action="Index">Khám phá công thức</a></li>
+                        <li><a asp-area="Client" asp-controller="Recipes" asp-action="Create">Chia sẻ món ăn</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,51 @@
+@model RegisterViewModel
+@{
+    ViewData["Title"] = "Đăng ký";
+}
+
+<section class="auth-panel">
+    <div class="auth-panel__intro">
+        <span class="section-heading__eyebrow">Tham gia cộng đồng</span>
+        <h1>Tạo tài khoản Share Food</h1>
+        <p>Đăng công thức yêu thích, lưu món ngon và kết nối với những người cùng yêu bếp.</p>
+    </div>
+
+    <div class="auth-card">
+        <partial name="_ValidationSummary" />
+        <form asp-action="Register" method="post" class="row g-3">
+            @Html.AntiForgeryToken()
+            <div class="col-12">
+                <label asp-for="FullName" class="form-label"></label>
+                <input asp-for="FullName" class="form-control form-control-lg" placeholder="Ví dụ: Nguyễn Minh An" />
+                <span asp-validation-for="FullName" class="text-danger small"></span>
+            </div>
+            <div class="col-12">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control form-control-lg" placeholder="ban@email.com" />
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" class="form-control form-control-lg" />
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="ConfirmPassword" class="form-label"></label>
+                <input asp-for="ConfirmPassword" class="form-control form-control-lg" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+            </div>
+            <div class="col-12 d-grid">
+                <button type="submit" class="btn btn-brand btn-lg">Tạo tài khoản</button>
+            </div>
+        </form>
+
+        <div class="auth-card__footer">
+            <span>Đã có tài khoản?</span>
+            <a asp-action="Login">Đăng nhập ngay</a>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

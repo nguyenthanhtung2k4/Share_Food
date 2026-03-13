@@ -1,0 +1,25 @@
+@model RecipeCardViewModel
+
+<article class="recipe-card h-100">
+    <a class="recipe-card__media" asp-area="Client" asp-controller="Recipes" asp-action="Details" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug">
+        <img src="@(string.IsNullOrWhiteSpace(Model.ThumbnailPath) ? Url.Content("~/images/recipe-placeholder.svg") : Model.ThumbnailPath)" alt="@Model.Title" />
+        <span class="recipe-card__badge">@Model.CategoryName</span>
+    </a>
+    <div class="recipe-card__body">
+        <div class="recipe-card__meta">
+            <span>@Model.AuthorName</span>
+            <span>@Model.CookTimeMinutes phút</span>
+        </div>
+        <h3>
+            <a asp-area="Client" asp-controller="Recipes" asp-action="Details" asp-route-id="@Model.Id" asp-route-slug="@Model.Slug">
+                @Model.Title
+            </a>
+        </h3>
+        <p>@Model.Summary</p>
+        <div class="recipe-card__stats">
+            <span>@Model.Servings khẩu phần</span>
+            <span>@Model.CommentCount bình luận</span>
+            <span>@Model.FavoriteCount yêu thích</span>
+        </div>
+    </div>
+</article>

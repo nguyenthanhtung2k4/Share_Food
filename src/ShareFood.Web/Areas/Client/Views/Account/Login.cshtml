@@ -1,0 +1,48 @@
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Đăng nhập";
+}
+
+<section class="auth-panel">
+    <div class="auth-panel__intro">
+        <span class="section-heading__eyebrow">Chào mừng quay lại</span>
+        <h1>Đăng nhập để tiếp tục nấu ăn</h1>
+        <p>Quản lý công thức, bình luận và lưu lại món ngon bạn yêu thích.</p>
+    </div>
+
+    <div class="auth-card">
+        <partial name="_ValidationSummary" />
+        <form asp-action="Login" method="post" class="row g-3">
+            @Html.AntiForgeryToken()
+            <input asp-for="ReturnUrl" type="hidden" />
+            <div class="col-12">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control form-control-lg" placeholder="ban@email.com" />
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+            <div class="col-12">
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" class="form-control form-control-lg" />
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+            <div class="col-12">
+                <div class="form-check">
+                    <input asp-for="RememberMe" class="form-check-input" />
+                    <label asp-for="RememberMe" class="form-check-label"></label>
+                </div>
+            </div>
+            <div class="col-12 d-grid">
+                <button type="submit" class="btn btn-brand btn-lg">Đăng nhập</button>
+            </div>
+        </form>
+
+        <div class="auth-card__footer">
+            <span>Chưa có tài khoản?</span>
+            <a asp-action="Register">Đăng ký ngay</a>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

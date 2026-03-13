@@ -1,0 +1,40 @@
+@model IngredientFormViewModel
+@{
+    var isEdit = Model.Id.HasValue;
+}
+
+<section class="admin-page">
+    <div class="admin-page__header">
+        <div>
+            <span class="section-heading__eyebrow">Nguyên liệu</span>
+            <h1>@(isEdit ? "Chỉnh sửa nguyên liệu" : "Thêm nguyên liệu")</h1>
+        </div>
+        <a class="btn btn-brand-outline" asp-action="Index">Quay lại danh sách</a>
+    </div>
+
+    <div class="admin-card admin-card--form">
+        <partial name="_ValidationSummary" />
+        <form method="post" class="row g-4">
+            @Html.AntiForgeryToken()
+            <input asp-for="Id" type="hidden" />
+            <div class="col-12">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control form-control-lg" />
+                <span asp-validation-for="Name" class="text-danger small"></span>
+            </div>
+            <div class="col-12">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Description" class="text-danger small"></span>
+            </div>
+            <div class="col-12 d-flex gap-3">
+                <button type="submit" class="btn btn-brand">Lưu nguyên liệu</button>
+                <a class="btn btn-light" asp-action="Index">Hủy</a>
+            </div>
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

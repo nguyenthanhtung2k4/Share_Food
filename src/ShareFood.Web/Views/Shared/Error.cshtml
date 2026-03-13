@@ -1,0 +1,15 @@
+@model ErrorViewModel
+@{
+    ViewData["Title"] = "Đã xảy ra lỗi";
+    Layout = "_ClientLayout";
+}
+
+<section class="status-panel status-panel--danger">
+    <span class="status-panel__eyebrow">Lỗi hệ thống</span>
+    <h1>Có lỗi xảy ra khi xử lý yêu cầu</h1>
+    <p>Hệ thống đang gặp sự cố tạm thời. Vui lòng thử lại sau vài phút.</p>
+    @if (!string.IsNullOrWhiteSpace(Model.RequestId))
+    {
+        <p class="text-muted mb-0">Mã yêu cầu: <code>@Model.RequestId</code></p>
+    }
+</section>

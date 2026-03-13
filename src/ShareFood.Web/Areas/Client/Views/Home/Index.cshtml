@@ -1,0 +1,64 @@
+@model HomePageViewModel
+@{
+    ViewData["Title"] = "Trang chủ";
+}
+
+<section class="hero-panel">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+            <span class="hero-panel__eyebrow">Cộng đồng nấu ăn tại nhà</span>
+            <h1>Chia sẻ công thức ngon, dễ làm và đậm chất bếp Việt</h1>
+            <p>
+                Lưu lại món ngon gia đình, khám phá cách nấu mới và kết nối với những người yêu bếp.
+                Share Food giúp bạn biến bữa cơm mỗi ngày thành một trải nghiệm đầy cảm hứng.
+            </p>
+            <div class="hero-panel__actions">
+                <a class="btn btn-brand btn-lg" asp-area="Client" asp-controller="Recipes" asp-action="Index">Khám phá công thức</a>
+                <a class="btn btn-brand-outline btn-lg" asp-area="Client" asp-controller="Recipes" asp-action="Create">Đăng món bạn yêu thích</a>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="hero-panel__card">
+                <h5 class="mb-3">Danh mục được quan tâm</h5>
+                @await Component.InvokeAsync("FeaturedCategories", new { count = 6 })
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-space">
+    <div class="section-heading">
+        <div>
+            <span class="section-heading__eyebrow">Được yêu thích</span>
+            <h2>Những công thức nổi bật</h2>
+        </div>
+        <a asp-area="Client" asp-controller="Recipes" asp-action="Index" class="btn btn-brand-outline">Xem tất cả</a>
+    </div>
+
+    <div class="row g-4">
+        @foreach (var item in Model.FeaturedRecipes)
+        {
+            <div class="col-md-6 col-xl-4">
+                <partial name="_RecipeCard" model="item" />
+            </div>
+        }
+    </div>
+</section>
+
+<section class="section-space">
+    <div class="section-heading">
+        <div>
+            <span class="section-heading__eyebrow">Mới chia sẻ</span>
+            <h2>Công thức vừa được đăng</h2>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        @foreach (var item in Model.LatestRecipes)
+        {
+            <div class="col-md-6 col-xl-3">
+                <partial name="_RecipeCard" model="item" />
+            </div>
+        }
+    </div>
+</section>

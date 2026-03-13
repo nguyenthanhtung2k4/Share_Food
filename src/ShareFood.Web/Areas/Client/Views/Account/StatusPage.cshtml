@@ -1,0 +1,11 @@
+@model StatusPageViewModel
+
+<section class="status-panel @(Model.IsSuccess ? "status-panel--success" : "status-panel--danger")">
+    <span class="status-panel__eyebrow">Thông báo hệ thống</span>
+    <h1>@Model.Title</h1>
+    <p>@Model.Message</p>
+    <div class="d-flex gap-3 justify-content-center flex-wrap mt-4">
+        <a class="btn btn-brand" asp-area="Client" asp-controller="Home" asp-action="Index">Về trang chủ</a>
+        <a class="btn btn-brand-outline" asp-area="Client" asp-controller="Account" asp-action="Login">Đăng nhập</a>
+    </div>
+</section>

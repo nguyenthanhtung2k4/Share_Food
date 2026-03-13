@@ -1,0 +1,54 @@
+@model ProfileOverviewViewModel
+@{
+    ViewData["Title"] = "Hồ sơ";
+}
+
+<section class="profile-hero">
+    <div>
+        <span class="section-heading__eyebrow">Thành viên Share Food</span>
+        <h1>@Model.FullName</h1>
+        <p>@Model.Email</p>
+        <small>Tham gia từ @Model.JoinedAt.ToLocalTime().ToString("dd/MM/yyyy")</small>
+    </div>
+    <div class="profile-hero__stats">
+        <div>
+            <strong>@Model.RecipeCount</strong>
+            <span>Công thức đã đăng</span>
+        </div>
+        <div>
+            <strong>@Model.FavoriteCount</strong>
+            <span>Món đã lưu</span>
+        </div>
+    </div>
+</section>
+
+<section class="section-space">
+    <div class="section-heading">
+        <div>
+            <span class="section-heading__eyebrow">Sáng tạo của bạn</span>
+            <h2>Công thức của tôi</h2>
+        </div>
+        <a class="btn btn-brand" asp-area="Client" asp-controller="Recipes" asp-action="Create">Đăng công thức mới</a>
+    </div>
+
+    <div class="row g-4">
+        @if (Model.MyRecipes.Count == 0)
+        {
+            <div class="col-12">
+                <div class="empty-panel">
+                    <h3>Bạn chưa đăng công thức nào</h3>
+                    <p>Hãy bắt đầu chia sẻ món ăn đầu tiên của bạn với cộng đồng.</p>
+                </div>
+            </div>
+        }
+        else
+        {
+            @foreach (var item in Model.MyRecipes)
+            {
+                <div class="col-md-6 col-xl-4">
+                    <partial name="_RecipeCard" model="item" />
+                </div>
+            }
+        }
+    </div>
+</section>

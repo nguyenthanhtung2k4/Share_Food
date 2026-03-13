@@ -1,0 +1,150 @@
+@model RecipeDetailViewModel
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<section class="recipe-detail">
+    @if (!Model.IsVisible)
+    {
+        <div class="alert alert-warning rounded-4 border-0 shadow-sm">
+            Công thức này đang bị ẩn khỏi danh sách công khai. Chỉ chủ sở hữu hoặc quản trị viên mới thấy thông báo này.
+        </div>
+    }
+
+    <div class="recipe-detail__hero">
+        <div class="recipe-detail__content">
+            <span class="section-heading__eyebrow">@Model.CategoryName</span>
+            <h1>@Model.Title</h1>
+            <p>@Model.Summary</p>
+            <div class="recipe-detail__meta">
+                <span>Bởi @Model.AuthorName</span>
+                <span>@Model.CookTimeMinutes phút</span>
+                <span>@Model.Servings khẩu phần</span>
+                <span>@Model.FavoriteCount lượt yêu thích</span>
+            </div>
+            <div class="d-flex gap-3 flex-wrap mt-4">
+                @if (User.Identity?.IsAuthenticated ?? false)
+                {
+                    <form asp-area="Client" asp-controller="Favorites" asp-action="Toggle" asp-route-recipeId="@Model.Id" asp-route-returnUrl="@Context.Request.Path" method="post">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn @(Model.IsFavorited ? "btn-brand" : "btn-brand-outline")">
+                            @(Model.IsFavorited ? "Đã yêu thích" : "Lưu công thức")
+                        </button>
+                    </form>
+                }
+                @if (Model.IsOwner || User.IsInRole(RoleNames.Admin))
+                {
+                    <a class="btn btn-light" asp-action="Edit" asp-route-id="@Model.Id">Chỉnh sửa</a>
+                    <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa công thức này?');">Xóa công thức</button>
+                    </form>
+                }
+            </div>
+        </div>
+        <div class="recipe-detail__image">
+            <img src="@(string.IsNullOrWhiteSpace(Model.ThumbnailPath) ? Url.Content("~/images/recipe-placeholder.svg") : Model.ThumbnailPath)" alt="@Model.Title" />
+        </div>
+    </div>
+
+    <div class="row g-4 mt-1">
+        <div class="col-lg-5">
+            <div class="detail-card">
+                <h2>Nguyên liệu</h2>
+                <ul class="ingredient-list">
+                    @foreach (var item in Model.Ingredients)
+                    {
+                        <li>
+                            <div>
+                                <strong>@item.IngredientName</strong>
+                                @if (!string.IsNullOrWhiteSpace(item.Note))
+                                {
+                                    <small>@item.Note</small>
+                                }
+                            </div>
+                            <span>@item.Quantity @item.UnitSymbol</span>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div class="detail-card">
+                <h2>Cách làm</h2>
+                <div class="step-flow">
+                    @foreach (var step in Model.Steps)
+                    {
+                        <div class="step-flow__item">
+                            <div class="step-flow__number">@step.StepNumber</div>
+                            <p>@step.Instruction</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-space">
+    <div class="section-heading">
+        <div>
+            <span class="section-heading__eyebrow">Cộng đồng</span>
+            <h2>Bình luận</h2>
+        </div>
+    </div>
+
+    @if (User.Identity?.IsAuthenticated ?? false)
+    {
+        <div class="detail-card mb-4">
+            <form asp-action="AddComment" asp-route-id="@Model.Id" method="post" class="row g-3">
+                @Html.AntiForgeryToken()
+                <div class="col-12">
+                    <label asp-for="NewComment.Content" class="form-label"></label>
+                    <textarea asp-for="NewComment.Content" class="form-control" rows="3" placeholder="Chia sẻ cảm nhận của bạn về món ăn này"></textarea>
+                    <span asp-validation-for="NewComment.Content" class="text-danger small"></span>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-brand">Gửi bình luận</button>
+                </div>
+            </form>
+        </div>
+    }
+    else
+    {
+        <div class="empty-panel mb-4">
+            <p class="mb-0">
+                Bạn cần <a asp-area="Client" asp-controller="Account" asp-action="Login">đăng nhập</a> để bình luận và lưu công thức yêu thích.
+            </p>
+        </div>
+    }
+
+    <div class="comment-list">
+        @if (Model.Comments.Count == 0)
+        {
+            <div class="empty-panel">
+                <h3>Chưa có bình luận</h3>
+                <p>Hãy là người đầu tiên chia sẻ cảm nhận về món ăn này.</p>
+            </div>
+        }
+        else
+        {
+            @foreach (var comment in Model.Comments)
+            {
+                <article class="comment-card">
+                    <div class="comment-card__avatar">@comment.UserName[..1]</div>
+                    <div class="comment-card__content">
+                        <div class="comment-card__header">
+                            <strong>@comment.UserName</strong>
+                            <span>@comment.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</span>
+                        </div>
+                        <p>@comment.Content</p>
+                    </div>
+                </article>
+            }
+        }
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

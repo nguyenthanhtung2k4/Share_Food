@@ -1,0 +1,15 @@
+@model IReadOnlyList<CategoryMenuItemViewModel>
+
+<div class="category-pills">
+    @foreach (var item in Model)
+    {
+        <a asp-area="Client"
+           asp-controller="Recipes"
+           asp-action="Index"
+           asp-route-categoryId="@item.Id"
+           class="category-pill">
+            <span>@item.Name</span>
+            <small>@item.RecipeCount món</small>
+        </a>
+    }
+</div>

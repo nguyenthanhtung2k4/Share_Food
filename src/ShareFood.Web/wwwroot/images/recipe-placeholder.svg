@@ -1,0 +1,17 @@
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="600" rx="48" fill="#F7E6D1"/>
+  <circle cx="625" cy="128" r="56" fill="#E98D4A" fill-opacity="0.35"/>
+  <circle cx="148" cy="492" r="78" fill="#4E8B6A" fill-opacity="0.18"/>
+  <rect x="176" y="118" width="448" height="364" rx="36" fill="white"/>
+  <path d="M301 255C301 216.892 331.892 186 370 186H430C468.108 186 499 216.892 499 255V286H301V255Z" fill="#E98D4A"/>
+  <path d="M268 312C268 301.507 276.507 293 287 293H513C523.493 293 532 301.507 532 312V341C532 403.408 481.408 454 419 454H381C318.592 454 268 403.408 268 341V312Z" fill="#C96B3B"/>
+  <path d="M352 221C352 207.193 363.193 196 377 196H423C436.807 196 448 207.193 448 221V243H352V221Z" fill="#FFF6EC"/>
+  <circle cx="346" cy="344" r="18" fill="#FFF6EC"/>
+  <circle cx="400" cy="380" r="18" fill="#FFF6EC"/>
+  <circle cx="456" cy="344" r="18" fill="#FFF6EC"/>
+  <path d="M218 128H318" stroke="#C96B3B" stroke-width="20" stroke-linecap="round"/>
+  <path d="M482 128H582" stroke="#C96B3B" stroke-width="20" stroke-linecap="round"/>
+  <text x="400" y="540" text-anchor="middle" fill="#7A4B31" font-family="Arial, sans-serif" font-size="32" font-weight="700">
+    Hình minh họa công thức
+  </text>
+</svg>

@@ -1,0 +1,26 @@
+@model PaginationViewModel
+
+@if (Model.TotalPages > 1)
+{
+    <nav aria-label="Phân trang">
+        <ul class="pagination justify-content-center flex-wrap gap-2">
+            @for (var pageNumber = 1; pageNumber <= Model.TotalPages; pageNumber++)
+            {
+                var routeValues = new Dictionary<string, string?>(Model.RouteValues)
+                {
+                    ["page"] = pageNumber.ToString()
+                };
+
+                <li class="page-item @(pageNumber == Model.PageNumber ? "active" : string.Empty)">
+                    <a class="page-link rounded-pill"
+                       asp-area="@Model.Area"
+                       asp-controller="@Model.Controller"
+                       asp-action="@Model.Action"
+                       asp-all-route-data="@routeValues">
+                        @pageNumber
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

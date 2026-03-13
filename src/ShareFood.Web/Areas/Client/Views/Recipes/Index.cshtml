@@ -1,0 +1,59 @@
+@model RecipeListPageViewModel
+@{
+    ViewData["Title"] = "Công thức";
+}
+
+<section class="section-space">
+    <div class="section-heading">
+        <div>
+            <span class="section-heading__eyebrow">Khám phá món ngon</span>
+            <h1>Kho công thức nấu ăn</h1>
+        </div>
+        <a class="btn btn-brand" asp-action="Create">Đăng công thức</a>
+    </div>
+
+    <form method="get" class="search-bar search-bar--surface mb-4">
+        <input asp-for="Keyword" class="form-control" placeholder="Tìm theo tên món, mô tả hoặc danh mục" />
+        <select asp-for="CategoryId" asp-items="Model.Categories" class="form-select">
+            <option value="">Tất cả danh mục</option>
+        </select>
+        <button type="submit" class="btn btn-brand-outline">Tìm kiếm</button>
+    </form>
+
+    <div class="row g-4">
+        @if (Model.Recipes.Items.Count == 0)
+        {
+            <div class="col-12">
+                <div class="empty-panel">
+                    <h3>Chưa có công thức phù hợp</h3>
+                    <p>Hãy thử thay đổi từ khóa tìm kiếm hoặc chia sẻ công thức đầu tiên của bạn.</p>
+                </div>
+            </div>
+        }
+        else
+        {
+            @foreach (var item in Model.Recipes.Items)
+            {
+                <div class="col-md-6 col-xl-4">
+                    <partial name="_RecipeCard" model="item" />
+                </div>
+            }
+        }
+    </div>
+
+    <div class="mt-4">
+        <partial name="_PagedNavigation" model='new PaginationViewModel
+        {
+            PageNumber = Model.Recipes.PageNumber,
+            TotalPages = Model.Recipes.TotalPages,
+            Action = "Index",
+            Controller = "Recipes",
+            Area = "Client",
+            RouteValues = new Dictionary<string, string?>
+            {
+                ["keyword"] = Model.Keyword,
+                ["categoryId"] = Model.CategoryId?.ToString()
+            }
+        }' />
+    </div>
+</section>

@@ -1,0 +1,11 @@
+@{
+    ViewData["Title"] = "Truy cập bị từ chối";
+    Layout = "_ClientLayout";
+}
+
+<section class="status-panel status-panel--danger">
+    <span class="status-panel__eyebrow">Không đủ quyền</span>
+    <h1>Truy cập bị từ chối</h1>
+    <p>Bạn không có quyền thực hiện thao tác này. Hãy quay lại trang trước hoặc đăng nhập bằng tài khoản phù hợp.</p>
+    <a class="btn btn-brand mt-3" asp-area="Client" asp-controller="Home" asp-action="Index">Về trang chủ</a>
+</section>

@@ -1,0 +1,61 @@
+@{
+    var title = ViewData["Title"]?.ToString();
+    var pageTitle = string.IsNullOrWhiteSpace(title) ? "Quản trị | Share Food" : $"{title} | Quản trị Share Food";
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@pageTitle</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ShareFood.Web.styles.css" asp-append-version="true" />
+</head>
+<body class="admin-shell">
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <a class="brand-mark mb-4" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                <span class="brand-mark__icon">SF</span>
+                <span>
+                    <strong>Quản trị</strong>
+                    <small>Share Food</small>
+                </span>
+            </a>
+
+            <nav class="nav flex-column admin-nav">
+                <a class="nav-link" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Tổng quan</a>
+                <a class="nav-link" asp-area="Admin" asp-controller="Categories" asp-action="Index">Danh mục</a>
+                <a class="nav-link" asp-area="Admin" asp-controller="Ingredients" asp-action="Index">Nguyên liệu</a>
+                <a class="nav-link" asp-area="Admin" asp-controller="Units" asp-action="Index">Đơn vị đo</a>
+                <a class="nav-link" asp-area="Admin" asp-controller="Recipes" asp-action="Index">Công thức</a>
+                <a class="nav-link" asp-area="Admin" asp-controller="Comments" asp-action="Index">Bình luận</a>
+                <a class="nav-link" asp-area="Admin" asp-controller="Users" asp-action="Index">Người dùng</a>
+            </nav>
+
+            <div class="admin-sidebar__footer">
+                <a class="btn btn-sm btn-brand-outline w-100 mb-2" asp-area="Client" asp-controller="Home" asp-action="Index">Về trang người dùng</a>
+                <form asp-area="Client" asp-controller="Account" asp-action="Logout" method="post">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-sm btn-brand w-100">Đăng xuất</button>
+                </form>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+            <div class="container-fluid py-4 py-lg-5">
+                @await Html.PartialAsync("_Toast")
+                @RenderBody()
+            </div>
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

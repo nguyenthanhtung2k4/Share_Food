@@ -1,0 +1,194 @@
+@model RecipeCreateEditViewModel
+@{
+    var isEdit = Model.Id.HasValue;
+}
+
+<section class="section-space">
+    <div class="section-heading">
+        <div>
+            <span class="section-heading__eyebrow">Chia sẻ món ngon</span>
+            <h1>@(isEdit ? "Chỉnh sửa công thức" : "Đăng công thức mới")</h1>
+        </div>
+        <a class="btn btn-brand-outline" asp-action="Index">Quay lại danh sách</a>
+    </div>
+
+    <div class="recipe-form-panel">
+        <partial name="_ValidationSummary" />
+        <form method="post" enctype="multipart/form-data" class="row g-4" data-recipe-form>
+            @Html.AntiForgeryToken()
+            <input asp-for="Id" type="hidden" />
+            <input asp-for="ExistingThumbnailPath" type="hidden" />
+
+            <div class="col-lg-8">
+                <label asp-for="Title" class="form-label"></label>
+                <input asp-for="Title" class="form-control form-control-lg" placeholder="Ví dụ: Gà hầm rau củ" />
+                <span asp-validation-for="Title" class="text-danger small"></span>
+            </div>
+
+            <div class="col-lg-4">
+                <label asp-for="CategoryId" class="form-label"></label>
+                <select asp-for="CategoryId" asp-items="Model.Categories" class="form-select form-select-lg">
+                    <option value="">Chọn danh mục</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger small"></span>
+            </div>
+
+            <div class="col-12">
+                <label asp-for="Summary" class="form-label"></label>
+                <textarea asp-for="Summary" class="form-control" rows="4" placeholder="Mô tả ngắn về món ăn, hương vị hoặc dịp phù hợp."></textarea>
+                <span asp-validation-for="Summary" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="Servings" class="form-label"></label>
+                <input asp-for="Servings" class="form-control form-control-lg" />
+                <span asp-validation-for="Servings" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="CookTimeMinutes" class="form-label"></label>
+                <input asp-for="CookTimeMinutes" class="form-control form-control-lg" />
+                <span asp-validation-for="CookTimeMinutes" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="Thumbnail" class="form-label"></label>
+                <input asp-for="Thumbnail" class="form-control form-control-lg" accept=".jpg,.jpeg,.png,.webp" />
+                <span asp-validation-for="Thumbnail" class="text-danger small"></span>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.ExistingThumbnailPath))
+            {
+                <div class="col-12">
+                    <div class="current-image-preview">
+                        <img src="@Model.ExistingThumbnailPath" alt="Ảnh hiện tại của công thức" />
+                    </div>
+                </div>
+            }
+
+            <div class="col-12">
+                <div class="recipe-form-section">
+                    <div class="recipe-form-section__header">
+                        <div>
+                            <h3>Nguyên liệu</h3>
+                            <p>Thêm các nguyên liệu cần thiết cho món ăn.</p>
+                        </div>
+                        <button type="button" class="btn btn-brand-outline" data-add-ingredient>Thêm nguyên liệu</button>
+                    </div>
+                    <div class="recipe-form-grid" data-ingredient-list>
+                        @for (var i = 0; i < Model.Ingredients.Count; i++)
+                        {
+                            <div class="recipe-form-grid__row" data-ingredient-row>
+                                <div>
+                                    <label class="form-label">Nguyên liệu</label>
+                                    <select asp-for="Ingredients[i].IngredientId" asp-items="Model.AvailableIngredients" class="form-select">
+                                        <option value="">Chọn nguyên liệu</option>
+                                    </select>
+                                    <span asp-validation-for="Ingredients[i].IngredientId" class="text-danger small"></span>
+                                </div>
+                                <div>
+                                    <label class="form-label">Số lượng</label>
+                                    <input asp-for="Ingredients[i].Quantity" class="form-control" />
+                                    <span asp-validation-for="Ingredients[i].Quantity" class="text-danger small"></span>
+                                </div>
+                                <div>
+                                    <label class="form-label">Đơn vị</label>
+                                    <select asp-for="Ingredients[i].UnitId" asp-items="Model.Units" class="form-select">
+                                        <option value="">Chọn đơn vị</option>
+                                    </select>
+                                    <span asp-validation-for="Ingredients[i].UnitId" class="text-danger small"></span>
+                                </div>
+                                <div>
+                                    <label class="form-label">Ghi chú</label>
+                                    <input asp-for="Ingredients[i].Note" class="form-control" placeholder="Ví dụ: băm nhỏ" />
+                                    <span asp-validation-for="Ingredients[i].Note" class="text-danger small"></span>
+                                </div>
+                                <div class="recipe-form-grid__action">
+                                    <button type="button" class="btn btn-outline-danger" data-remove-row>Xóa</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="recipe-form-section">
+                    <div class="recipe-form-section__header">
+                        <div>
+                            <h3>Các bước nấu</h3>
+                            <p>Mô tả lần lượt từng bước để người khác dễ làm theo.</p>
+                        </div>
+                        <button type="button" class="btn btn-brand-outline" data-add-step>Thêm bước</button>
+                    </div>
+                    <div class="step-list" data-step-list>
+                        @for (var i = 0; i < Model.Steps.Count; i++)
+                        {
+                            <div class="step-card" data-step-row>
+                                <div class="step-card__index">Bước @(@i + 1)</div>
+                                <input asp-for="Steps[i].StepNumber" type="hidden" value="@(@i + 1)" />
+                                <textarea asp-for="Steps[i].Instruction" class="form-control" rows="3" placeholder="Mô tả bước nấu chi tiết"></textarea>
+                                <span asp-validation-for="Steps[i].Instruction" class="text-danger small"></span>
+                                <button type="button" class="btn btn-outline-danger align-self-start" data-remove-row>Xóa bước</button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 d-flex gap-3 flex-wrap">
+                <button type="submit" class="btn btn-brand btn-lg">Lưu công thức</button>
+                <a class="btn btn-light btn-lg" asp-action="Index">Hủy</a>
+            </div>
+        </form>
+    </div>
+</section>
+
+<template id="ingredient-row-template">
+    <div class="recipe-form-grid__row" data-ingredient-row>
+        <div>
+            <label class="form-label">Nguyên liệu</label>
+            <select name="Ingredients[__index__].IngredientId" class="form-select">
+                <option value="">Chọn nguyên liệu</option>
+                @foreach (var item in Model.AvailableIngredients)
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            </select>
+        </div>
+        <div>
+            <label class="form-label">Số lượng</label>
+            <input name="Ingredients[__index__].Quantity" class="form-control" type="number" step="0.1" min="0.1" />
+        </div>
+        <div>
+            <label class="form-label">Đơn vị</label>
+            <select name="Ingredients[__index__].UnitId" class="form-select">
+                <option value="">Chọn đơn vị</option>
+                @foreach (var item in Model.Units)
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            </select>
+        </div>
+        <div>
+            <label class="form-label">Ghi chú</label>
+            <input name="Ingredients[__index__].Note" class="form-control" />
+        </div>
+        <div class="recipe-form-grid__action">
+            <button type="button" class="btn btn-outline-danger" data-remove-row>Xóa</button>
+        </div>
+    </div>
+</template>
+
+<template id="step-row-template">
+    <div class="step-card" data-step-row>
+        <div class="step-card__index">Bước</div>
+        <input name="Steps[__index__].StepNumber" type="hidden" value="1" />
+        <textarea name="Steps[__index__].Instruction" class="form-control" rows="3" placeholder="Mô tả bước nấu chi tiết"></textarea>
+        <button type="button" class="btn btn-outline-danger align-self-start" data-remove-row>Xóa bước</button>
+    </div>
+</template>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,77 @@
+@model DashboardViewModel
+@{
+    ViewData["Title"] = "Tổng quan";
+}
+
+<section class="admin-page">
+    <div class="admin-page__header">
+        <div>
+            <span class="section-heading__eyebrow">Bảng điều khiển</span>
+            <h1>Tổng quan hệ thống</h1>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-6 col-xl-3">
+            <div class="metric-card">
+                <span>Người dùng</span>
+                <strong>@Model.TotalUsers</strong>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="metric-card">
+                <span>Tổng công thức</span>
+                <strong>@Model.TotalRecipes</strong>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="metric-card">
+                <span>Công thức đang hiển thị</span>
+                <strong>@Model.VisibleRecipes</strong>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <div class="metric-card">
+                <span>Bình luận</span>
+                <strong>@Model.TotalComments</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-card">
+        <div class="section-heading mb-4">
+            <div>
+                <span class="section-heading__eyebrow">Mới cập nhật</span>
+                <h2>Công thức gần đây</h2>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Tên công thức</th>
+                        <th>Tác giả</th>
+                        <th>Trạng thái</th>
+                        <th>Ngày đăng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.LatestRecipes)
+                    {
+                        <tr>
+                            <td>@item.Title</td>
+                            <td>@item.AuthorName</td>
+                            <td>
+                                <span class="badge @(item.IsVisible ? "text-bg-success" : "text-bg-secondary")">
+                                    @(item.IsVisible ? "Đang hiển thị" : "Đang ẩn")
+                                </span>
+                            </td>
+                            <td>@item.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
